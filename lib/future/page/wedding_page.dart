@@ -14,6 +14,9 @@ class WeddingPage extends StatefulWidget {
 
 class _WeddingPageState extends State<WeddingPage> {
   late final ScrollController _controller;
+  late final bool _selected;
+  late final OverlayEntry _overlayEntry;
+  late final OverlayState _overlayState;
 
   _scrollListener() {
     if (_controller.offset > 950) {
@@ -41,27 +44,38 @@ class _WeddingPageState extends State<WeddingPage> {
   @override
   Widget build(BuildContext context) => Scaffold(
         body: Stack(
+          // fit: StackFit.expand,
           children: [
+            const Align(
+              alignment: Alignment.center,
+              child: Image(
+                image: AssetImage('assets/images/backg.png'),
+              ),
+            ),
+            // const DecoratedBox(
+            //   decoration: BoxDecoration(
+            //     boxShadow: [
+            //       BoxShadow(
+            //         color: Colors.black45,
+            //         spreadRadius: 4,
+            //         blurRadius: 12,
+            //         offset: Offset(0, 4),
+            //       ),
+            //     ],
+            //   ),
+            //   child: Image(
+            //     image: AssetImage('assets/images/spot1.png'),
+            //   ),
+            // ),
             SingleChildScrollView(
               controller: _controller,
               child: const Column(
                 children: [
                   WelcomePage(),
                   CalendarPage(),
+                  //сюда верстку
                 ],
               ),
-            ),
-            AnimatedBuilder(
-              animation: _controller,
-              builder: (context, _) => _controller.offset > 800
-                  ? Padding(
-                      padding: const EdgeInsets.only(right: 216),
-                      child: Align(
-                        alignment: Alignment.topCenter,
-                        child: Image.asset('assets/images/spot1.png'),
-                      ),
-                    )
-                  : const SizedBox.shrink(),
             ),
           ],
         ),

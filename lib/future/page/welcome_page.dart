@@ -28,24 +28,21 @@ class WelcomePage extends StatelessWidget {
             Stack(
               children: [
                 const _Picture(),
-                Padding(
-                  padding: const EdgeInsets.only(top: 50),
-                  child: Align(
-                    alignment: Alignment.center,
-                    child: DefaultTextStyle(
-                      style: GoogleFonts.ptSansNarrow(
-                        color: Colors.white,
-                        fontSize: 20,
-                        fontWeight: FontWeight.w400,
-                      ),
-                      child: const Column(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          _DateCol(),
-                          _TimeCol(),
-                        ],
-                      ),
+                Align(
+                  alignment: Alignment.centerRight,
+                  child: DefaultTextStyle(
+                    style: GoogleFonts.ptSansNarrow(
+                      color: Colors.white,
+                      fontSize: 20,
+                      fontWeight: FontWeight.w400,
+                    ),
+                    child: const Column(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        _DateCol(),
+                        _TimeCol(),
+                      ],
                     ),
                   ),
                 ),

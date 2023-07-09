@@ -13,6 +13,11 @@ dependencies:
   flutter:
     sdk: flutter
 
+  syncfusion_flutter_maps: ^22.1.37
+  flutter_html: ^2.2.1
+  yandex_mapkit: ^3.3.3
+  flutter_sticky_widgets: ^0.0.3
+  indexed: ^0.0.8
   blur: ^3.1.0
   google_fonts: ^5.1.0
   cupertino_icons: ^1.0.2
@@ -29,6 +34,7 @@ flutter:
   uses-material-design: true
   assets:
     - assets/images/
+    - assets/geo/
 
   # To add assets to your application, add an assets section, like this:
 
