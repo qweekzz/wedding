@@ -154,7 +154,10 @@ class _DateCol extends StatelessWidget {
   @override
   Widget build(BuildContext context) => Column(
         children: [
-          const Text('ЧЕТВЕРГ'),
+          const Padding(
+            padding: EdgeInsets.only(top: 40),
+            child: Text('ЧЕТВЕРГ'),
+          ),
           const Padding(
             padding: EdgeInsets.symmetric(vertical: 10),
             child: Text(
@@ -164,7 +167,7 @@ class _DateCol extends StatelessWidget {
           ),
           const Text('2023'),
           Padding(
-            padding: const EdgeInsets.only(top: 110),
+            padding: const EdgeInsets.only(top: 100),
             child: Text(
               'Дарья и Петр',
               style: GoogleFonts.pacifico(

@@ -14,31 +14,15 @@ class CalendarPage extends StatelessWidget {
   }) : super(key: key);
 
   @override
-  Widget build(BuildContext context) => Column(
-        children: [
-          Stack(
-            children: [
-              Column(
-                children: [
-                  ConstrainedBox(
-                    constraints: const BoxConstraints(minWidth: 533),
-                    child: const _MainStack(),
-                  ),
-                  //текст
-                  //текст
-                  //текст
-                ],
-              ),
-            ],
-          )
-          // текст обалака
-          // календарь и полосы
-          //план мероприятий
-        ],
+  Widget build(BuildContext context) => ConstrainedBox(
+        constraints: const BoxConstraints(minWidth: 533),
+        child: const _MainStack(),
       );
 }
 
 List<Widget> listWidgets(BuildContext context) {
+  final String x3 = MediaQuery.of(context).size.width > 500 ? '2.0x' : '';
+
   return [
     Positioned(
       top: 740,
@@ -51,78 +35,79 @@ List<Widget> listWidgets(BuildContext context) {
       child: Image.asset('assets/images/Line1.png'),
     ),
     Positioned(
-      top: 6,
+      top: MediaQuery.of(context).size.width > 500 ? 6 : 50,
       right: 0,
-      child: Image.asset('assets/images/fw2.png'),
+      child: Image.asset('assets/images/$x3/fw2.png'),
     ),
     Positioned(
-      top: 822,
+      top: MediaQuery.of(context).size.width > 500 ? 822 : 1700,
       right: 0,
-      child: Image.asset('assets/images/fw2.png'),
+      child: Image.asset('assets/images/$x3/fw2.png'),
     ),
     Positioned(
-      top: MediaQuery.of(context).size.width > 500 ? 2055 : 2646,
+      top: MediaQuery.of(context).size.width > 500 ? 2055 : 2770,
       right: 0,
-      child: Image.asset('assets/images/fw2.png'),
+      child: Image.asset('assets/images/$x3/fw2.png'),
     ),
     Positioned(
-      top: MediaQuery.of(context).size.width > 500 ? 2804 : 3300,
+      top: MediaQuery.of(context).size.width > 500 ? 2804 : 3440,
       right: 0,
-      child: Image.asset('assets/images/fw2.png'),
+      child: Image.asset('assets/images/$x3/fw2.png'),
     ),
     Positioned(
-      top: MediaQuery.of(context).size.width > 500 ? 3403 : 3864,
+      top: MediaQuery.of(context).size.width > 500 ? 3403 : 4000,
       right: 0,
-      child: Image.asset('assets/images/fw2.png'),
+      child: Image.asset('assets/images/$x3/fw2.png'),
     ),
-    const Positioned(
-      top: 353,
+    Positioned(
+      top: MediaQuery.of(context).size.width > 500 ? 353 : 400,
       left: 0,
       child: Image(
-        width: 100,
         fit: BoxFit.cover,
-        image: AssetImage('assets/images/fw1.png'),
+        image: AssetImage('assets/images/$x3/fw1.png'),
       ),
     ),
     Positioned(
-      top: 353,
+      top: MediaQuery.of(context).size.width > 500 ? 1582 : 1350,
       left: 0,
-      child: Image.asset('assets/images/fw1.png'),
+      child: Image.asset('assets/images/$x3/fw1.png'),
     ),
     Positioned(
-      top: MediaQuery.of(context).size.width > 500 ? 1582 : 1734,
+      top: MediaQuery.of(context).size.width > 500 ? 2658 : 2060,
       left: 0,
-      child: Image.asset('assets/images/fw1.png'),
-    ),
-    Positioned(
-      top: MediaQuery.of(context).size.width > 500 ? 2608 : 3169,
-      left: 0,
-      child: const Image(
-        image: AssetImage('assets/images/fw1.png'),
+      child: Image(
+        image: AssetImage('assets/images/$x3/fw1.png'),
       ),
     ),
     Positioned(
-      top: MediaQuery.of(context).size.width > 500 ? 3403 : 3823,
+      top: MediaQuery.of(context).size.width > 500 ? 3403 : 3280,
       left: 0,
-      child: Image.asset('assets/images/fw1.png'),
+      child: Image.asset('assets/images/$x3/fw1.png'),
     ),
+    if (MediaQuery.of(context).size.width <= 500)
+      Positioned(
+        bottom: 1100,
+        left: 0,
+        child: Image(
+          fit: BoxFit.cover,
+          image: AssetImage('assets/images/$x3/fw1.png'),
+        ),
+      ),
     MediaQuery.of(context).size.width > 500
-        ? const Positioned(
+        ? Positioned(
             bottom: 255,
             left: 0,
             child: Image(
-              width: 100,
               fit: BoxFit.cover,
-              image: AssetImage('assets/images/fw1.png'),
+              image: AssetImage('assets/images/$x3/fw1.png'),
             ),
           )
-        : const Positioned(
+        : Positioned(
             bottom: 255,
             right: 0,
             child: Image(
-              width: 75,
               fit: BoxFit.cover,
-              image: AssetImage('assets/images/fw2.png'),
+              image: AssetImage('assets/images/$x3/fw2.png'),
             ),
           ),
   ];
@@ -170,7 +155,9 @@ class _MainStackState extends State<_MainStack> {
               DrinkPage(
                 select: _select,
               ),
-              const _SendButton(),
+              _SendButton(
+                select: _select,
+              ),
             ],
           ),
         ],
@@ -445,53 +432,78 @@ class _CalendarAndFlowers extends StatelessWidget {
 }
 
 @immutable
-class _SendButton extends StatelessWidget {
+class _SendButton extends StatefulWidget {
+  final ValueNotifier<List<int>> select;
+
   const _SendButton({
+    required this.select,
     Key? key,
   }) : super(key: key);
 
   @override
-  Widget build(BuildContext context) => Padding(
-        padding: const EdgeInsets.only(
-          top: 40,
-          bottom: 165,
-        ),
-        child: DecoratedBox(
-          decoration: const BoxDecoration(
-            boxShadow: [
-              BoxShadow(
-                  color: Colors.black26, offset: Offset(0, 4), blurRadius: 5.0)
+  State<_SendButton> createState() => _SendButtonState();
+}
+
+class _SendButtonState extends State<_SendButton> {
+  late ValueNotifier<bool> _active;
+
+  @override
+  void initState() {
+    super.initState();
+    _active = ValueNotifier(true);
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.only(
+        top: 40,
+        bottom: 165,
+      ),
+      child: DecoratedBox(
+        decoration: const BoxDecoration(
+          boxShadow: [
+            BoxShadow(
+                color: Colors.black26, offset: Offset(0, 4), blurRadius: 5.0)
+          ],
+          borderRadius: BorderRadius.all(Radius.circular(5)),
+          gradient: LinearGradient(
+            colors: [
+              Color.fromRGBO(0, 209, 255, 1),
+              Color.fromRGBO(103, 178, 101, 1),
             ],
-            borderRadius: BorderRadius.all(Radius.circular(5)),
-            gradient: LinearGradient(
-              colors: [
-                Color.fromRGBO(0, 209, 255, 1),
-                Color.fromRGBO(103, 178, 101, 1),
-              ],
-            ),
-          ),
-          child: ElevatedButton(
-            style: ElevatedButton.styleFrom(
-              shadowColor: Colors.transparent,
-              shape: const RoundedRectangleBorder(),
-              padding: const EdgeInsets.symmetric(
-                vertical: 18,
-                horizontal: 63,
-              ),
-              backgroundColor: Colors.transparent,
-            ),
-            onPressed: () {},
-            child: const Text(
-              'Отправить',
-              style: TextStyle(
-                color: Colors.white,
-                fontSize: 20,
-                height: 1,
-              ),
-            ),
           ),
         ),
-      );
+        child: AnimatedBuilder(
+          animation: _active,
+          builder: (context, _) => _active.value
+              ? ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    shadowColor: Colors.transparent,
+                    shape: const RoundedRectangleBorder(),
+                    padding: const EdgeInsets.symmetric(
+                      vertical: 18,
+                      horizontal: 63,
+                    ),
+                    backgroundColor: Colors.transparent,
+                  ),
+                  onPressed: () async {
+                    // _active.value = false;
+                  },
+                  child: const Text(
+                    'Отправить',
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 20,
+                      height: 1,
+                    ),
+                  ),
+                )
+              : const SizedBox.shrink(),
+        ),
+      ),
+    );
+  }
 }
 
 //Copy this CustomPainter code to the Bottom of the File

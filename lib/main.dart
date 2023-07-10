@@ -1,7 +1,13 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:wedding/future/page/wedding_page.dart';
 
-void main() {
+import 'firebase_options.dart';
+
+Future<void> main() async {
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
   runApp(const MyApp());
 }
 
@@ -10,15 +16,9 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Flutter Demo',
-      theme: ThemeData(
-        // textTheme: GoogleFonts.lobsterTextTheme(
-        //   Theme.of(context).textTheme,
-        // ),
-        primarySwatch: Colors.blue,
-      ),
-      home: const WeddingPage(),
+    return const MaterialApp(
+      debugShowCheckedModeBanner: false,
+      home: WeddingPage(),
     );
   }
 }

@@ -15,6 +15,7 @@ class DrinkPage extends StatelessWidget {
   Widget build(BuildContext context) => Padding(
         padding: const EdgeInsets.only(top: 80),
         child: Column(
+          mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             const TopicText(
@@ -30,48 +31,21 @@ class DrinkPage extends StatelessWidget {
                 padding: const EdgeInsets.only(top: 20),
                 child: AnimatedBuilder(
                   animation: select,
-                  builder: (context, _) => Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      _DrinkSelector(
-                        index: 1,
-                        select: select,
-                        title: 'Вино красное',
-
-                        // onTap: () {},
+                  builder: (context, _) {
+                    return SizedBox(
+                      width: 320,
+                      child: ListView.builder(
+                        itemCount: 7,
+                        physics: const NeverScrollableScrollPhysics(),
+                        shrinkWrap: true,
+                        itemBuilder: (context, index) => _DrinkSelector(
+                          title: 'title',
+                          select: select,
+                          index: index,
+                        ),
                       ),
-                      _DrinkSelector(
-                        index: 2,
-                        select: select,
-                        title: 'Вино белое',
-                      ),
-                      _DrinkSelector(
-                        index: 3,
-                        select: select,
-                        title: 'Водка',
-                      ),
-                      _DrinkSelector(
-                        index: 4,
-                        select: select,
-                        title: 'Коньяк',
-                      ),
-                      _DrinkSelector(
-                        index: 5,
-                        select: select,
-                        title: 'Настойки',
-                      ),
-                      _DrinkSelector(
-                        index: 6,
-                        select: select,
-                        title: 'Безалкогольные напитки',
-                      ),
-                      _DrinkSelector(
-                        index: 7,
-                        select: select,
-                        title: 'Я ПЬЮ ВСЁ',
-                      ),
-                    ],
-                  ),
+                    );
+                  },
                 ),
               ),
             ),

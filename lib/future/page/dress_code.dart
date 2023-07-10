@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:wedding/future/custom_paint/custom_paint.dart';
 import 'package:wedding/future/page/widgets/widgets.dart';
+
+import '../custom_paint/custom_paint.dart';
 
 @immutable
 class DressCode extends StatelessWidget {
@@ -18,7 +19,7 @@ class DressCode extends StatelessWidget {
               child: Transform.rotate(
                 angle: -6.4,
                 child: CustomPaint(
-                  size: Size(550, (30 * 0.11872909698996655).toDouble()),
+                  size: Size(533, (30 * 0.11872909698996655).toDouble()),
                   painter: GradientLine(),
                 ),
               ),

@@ -12,7 +12,7 @@ class GradientLine extends CustomPainter {
         [Color(0xffFBFE7D).withOpacity(1), Color(0xff5B5C07).withOpacity(1)],
         [0, 1]);
     canvas.drawRect(
-        Rect.fromLTWH(0, 0, size.width * 1.0995840, size.height), paint_0_fill);
+        Rect.fromLTWH(0, 0, size.width * 1.1599840, size.height), paint_0_fill);
   }
 
   @override

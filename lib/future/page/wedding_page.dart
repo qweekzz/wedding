@@ -14,9 +14,6 @@ class WeddingPage extends StatefulWidget {
 
 class _WeddingPageState extends State<WeddingPage> {
   late final ScrollController _controller;
-  late final bool _selected;
-  late final OverlayEntry _overlayEntry;
-  late final OverlayState _overlayState;
 
   _scrollListener() {
     if (_controller.offset > 950) {
@@ -46,34 +43,37 @@ class _WeddingPageState extends State<WeddingPage> {
         body: Stack(
           // fit: StackFit.expand,
           children: [
-            const Align(
+            Align(
               alignment: Alignment.center,
-              child: Image(
-                image: AssetImage('assets/images/backg.png'),
+              child: ConstrainedBox(
+                constraints: BoxConstraints(
+                  minWidth: 533,
+                  minHeight: MediaQuery.of(context).size.height,
+                ),
+                child: const DecoratedBox(
+                  decoration: BoxDecoration(
+                    boxShadow: [
+                      BoxShadow(
+                        offset: Offset(0, 4),
+                        blurRadius: 10,
+                        spreadRadius: 4,
+                        color: Colors.black38,
+                      )
+                    ],
+                  ),
+                  child: Image(
+                    fit: BoxFit.cover,
+                    image: AssetImage('assets/images/backg.png'),
+                  ),
+                ),
               ),
             ),
-            // const DecoratedBox(
-            //   decoration: BoxDecoration(
-            //     boxShadow: [
-            //       BoxShadow(
-            //         color: Colors.black45,
-            //         spreadRadius: 4,
-            //         blurRadius: 12,
-            //         offset: Offset(0, 4),
-            //       ),
-            //     ],
-            //   ),
-            //   child: Image(
-            //     image: AssetImage('assets/images/spot1.png'),
-            //   ),
-            // ),
             SingleChildScrollView(
               controller: _controller,
               child: const Column(
                 children: [
                   WelcomePage(),
                   CalendarPage(),
-                  //сюда верстку
                 ],
               ),
             ),

@@ -19,7 +19,7 @@ class Wishes extends StatelessWidget {
             child: Transform.rotate(
               angle: 6.45,
               child: CustomPaint(
-                size: Size(550, (30 * 0.11872909698996655).toDouble()),
+                size: Size(533, (30 * 0.11872909698996655).toDouble()),
                 painter: GradientLine(),
               ),
             ),
@@ -61,7 +61,7 @@ class Wishes extends StatelessWidget {
             child: Transform.rotate(
               angle: 0.01,
               child: CustomPaint(
-                size: Size(550, (30 * 0.11872909698996655).toDouble()),
+                size: Size(533, (30 * 0.11872909698996655).toDouble()),
                 painter: GradientLine(),
               ),
             ),
@@ -69,7 +69,7 @@ class Wishes extends StatelessWidget {
           Transform.rotate(
             angle: -6.43,
             child: CustomPaint(
-              size: Size(550, (30 * 0.11872909698996655).toDouble()),
+              size: Size(533, (30 * 0.11872909698996655).toDouble()),
               painter: GradientLine(),
             ),
           ),
