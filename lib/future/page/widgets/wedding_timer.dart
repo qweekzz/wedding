@@ -1,6 +1,10 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:wedding/core/extension/extension.dart';
+
+//Дата свадьбы
+final weddingDate = DateTime(2023, 8, 17, 14).toLocal();
 
 @immutable
 class WeddingTimer extends StatefulWidget {
@@ -13,50 +17,33 @@ class WeddingTimer extends StatefulWidget {
 }
 
 class _WeddingTimerState extends State<WeddingTimer> {
-  Timer? timer;
+  //таймер на 1 сек
+  late final Timer? _timer;
 
-  //Дата свадьбы
-  DateTime weddingDate = DateTime.utc(2023, 8, 17, 14);
-
-  // это хз как убрать
-  int month = DateTime.now().month;
-  int day = DateTime.now().day;
-  int hours = DateTime.now().hour;
-  int minute = DateTime.now().minute;
-  int second = DateTime.now().second;
-
-  late DateTime weddingTimer;
+  //Кол-во дней до сводьбы
+  late final ValueNotifier<Duration> _weddingTimer;
 
   @override
   void initState() {
     super.initState();
-    if (weddingDate.month > DateTime.now().month) {
-      day = day + 31;
-    }
-    //рассчет времени от данного момента до свадьбы
-    weddingTimer = weddingDate.subtract(Duration(
-      days: day,
-      hours: hours,
-      minutes: minute,
-      seconds: second,
-    ));
 
-    // таймер времени до свадьбы
-    timer = Timer.periodic(
+    final dateNow = DateTime.now().toLocal();
+    final differenceDate = weddingDate.difference(dateNow);
+
+    final dur = Duration(seconds: differenceDate.inSeconds);
+    _weddingTimer = ValueNotifier<Duration>(dur);
+
+    // таймер времени до свадьбы (отнемает 1 сек от даты свадьбы)
+    _timer = Timer.periodic(
       const Duration(seconds: 1),
-      (timer) {
-        setState(() {
-          weddingTimer = weddingTimer.subtract(
-            const Duration(seconds: 1),
-          );
-        });
-      },
+      (timer) => _weddingTimer.value -= const Duration(seconds: 1),
     );
   }
 
   @override
   void dispose() {
-    timer?.cancel();
+    _timer?.cancel();
+    _weddingTimer.dispose();
     super.dispose();
   }
 
@@ -64,7 +51,7 @@ class _WeddingTimerState extends State<WeddingTimer> {
   Widget build(BuildContext context) => Column(
         children: [
           _WeddingTimerRow(
-            weddingTimer: weddingTimer,
+            weddingTimer: _weddingTimer,
             weddingDate: weddingDate,
           )
         ],
@@ -98,7 +85,7 @@ class _TimerColumn extends StatelessWidget {
 
 @immutable
 class _WeddingTimerRow extends StatelessWidget {
-  final DateTime weddingTimer;
+  final ValueNotifier<Duration> weddingTimer;
   final DateTime weddingDate;
 
   const _WeddingTimerRow({
@@ -110,37 +97,38 @@ class _WeddingTimerRow extends StatelessWidget {
   @override
   Widget build(BuildContext context) => Padding(
         padding: const EdgeInsets.only(top: 18, bottom: 40),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Padding(
-              padding: const EdgeInsets.only(right: 20),
-              child: _TimerColumn(
-                title: 'ДНЕЙ',
-                weddingTimer: weddingDate.month > DateTime.now().month
-                    ? weddingTimer.day + 31
-                    : weddingTimer.day,
+        child: ValueListenableBuilder<Duration>(
+          valueListenable: weddingTimer,
+          builder: (context, timer, _) => Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Padding(
+                padding: const EdgeInsets.only(right: 20),
+                child: _TimerColumn(
+                  title: 'ДНЕЙ',
+                  weddingTimer: timer.inDaysRest,
+                ),
               ),
-            ),
-            Padding(
-              padding: const EdgeInsets.only(right: 20),
-              child: _TimerColumn(
-                title: 'ЧАСОВ',
-                weddingTimer: weddingTimer.hour,
+              Padding(
+                padding: const EdgeInsets.only(right: 20),
+                child: _TimerColumn(
+                  title: 'ЧАСОВ',
+                  weddingTimer: timer.inHoursRest,
+                ),
               ),
-            ),
-            Padding(
-              padding: const EdgeInsets.only(right: 20),
-              child: _TimerColumn(
-                title: 'МИНУТ',
-                weddingTimer: weddingTimer.minute,
+              Padding(
+                padding: const EdgeInsets.only(right: 20),
+                child: _TimerColumn(
+                  title: 'МИНУТ',
+                  weddingTimer: timer.inMinutesRest,
+                ),
               ),
-            ),
-            _TimerColumn(
-              title: 'СЕКУНД',
-              weddingTimer: weddingTimer.second,
-            ),
-          ],
+              _TimerColumn(
+                title: 'СЕКУНД',
+                weddingTimer: timer.inSecondsRest,
+              ),
+            ],
+          ),
         ),
       );
 }

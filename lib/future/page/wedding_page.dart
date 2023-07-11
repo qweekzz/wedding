@@ -41,7 +41,33 @@ class _WeddingPageState extends State<WeddingPage> {
   @override
   Widget build(BuildContext context) => Scaffold(
         body: Stack(
+          // fit: StackFit.expand,
           children: [
+            Align(
+              alignment: Alignment.center,
+              child: ConstrainedBox(
+                constraints: BoxConstraints(
+                  minWidth: 533,
+                  minHeight: MediaQuery.of(context).size.height,
+                ),
+                child: const DecoratedBox(
+                  decoration: BoxDecoration(
+                    boxShadow: [
+                      BoxShadow(
+                        offset: Offset(0, 4),
+                        blurRadius: 10,
+                        spreadRadius: 4,
+                        color: Colors.black38,
+                      )
+                    ],
+                  ),
+                  child: Image(
+                    fit: BoxFit.cover,
+                    image: AssetImage('assets/images/backg.png'),
+                  ),
+                ),
+              ),
+            ),
             SingleChildScrollView(
               controller: _controller,
               child: const Column(
@@ -50,18 +76,6 @@ class _WeddingPageState extends State<WeddingPage> {
                   CalendarPage(),
                 ],
               ),
-            ),
-            AnimatedBuilder(
-              animation: _controller,
-              builder: (context, _) => _controller.offset > 800
-                  ? Padding(
-                      padding: const EdgeInsets.only(right: 216),
-                      child: Align(
-                        alignment: Alignment.topCenter,
-                        child: Image.asset('assets/images/spot1.png'),
-                      ),
-                    )
-                  : const SizedBox.shrink(),
             ),
           ],
         ),

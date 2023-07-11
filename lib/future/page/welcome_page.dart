@@ -28,24 +28,21 @@ class WelcomePage extends StatelessWidget {
             Stack(
               children: [
                 const _Picture(),
-                Padding(
-                  padding: const EdgeInsets.only(top: 50),
-                  child: Align(
-                    alignment: Alignment.center,
-                    child: DefaultTextStyle(
-                      style: GoogleFonts.ptSansNarrow(
-                        color: Colors.white,
-                        fontSize: 20,
-                        fontWeight: FontWeight.w400,
-                      ),
-                      child: const Column(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          _DateCol(),
-                          _TimeCol(),
-                        ],
-                      ),
+                Align(
+                  alignment: Alignment.centerRight,
+                  child: DefaultTextStyle(
+                    style: GoogleFonts.ptSansNarrow(
+                      color: Colors.white,
+                      fontSize: 20,
+                      fontWeight: FontWeight.w400,
+                    ),
+                    child: const Column(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        _DateCol(),
+                        _TimeCol(),
+                      ],
                     ),
                   ),
                 ),
@@ -158,7 +155,10 @@ class _DateCol extends StatelessWidget {
   @override
   Widget build(BuildContext context) => Column(
         children: [
-          const Text('ЧЕТВЕРГ'),
+          const Padding(
+            padding: EdgeInsets.only(top: 40),
+            child: Text('ЧЕТВЕРГ'),
+          ),
           const Padding(
             padding: EdgeInsets.symmetric(vertical: 10),
             child: Text(
@@ -168,7 +168,7 @@ class _DateCol extends StatelessWidget {
           ),
           const Text('2023'),
           Padding(
-            padding: const EdgeInsets.only(top: 110),
+            padding: const EdgeInsets.only(top: 100),
             child: Text(
               'Дарья и Петр',
               style: GoogleFonts.pacifico(
