@@ -34,7 +34,7 @@ class _TestMapState extends State<MapPolylinesPage>
     _routes = <_RouteDetails>[
       _RouteDetails(
         const MapLatLng(54.665036, 55.928068),
-        Image(image: AssetImage('assets/images/weddingGeo.png'), height: 50),
+        const Image(image: AssetImage('assets/images/weddingGeo.png'), height: 50),
         'Место свадьбы',
       ),
       _RouteDetails(

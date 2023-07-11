@@ -1,3 +1,5 @@
+// ignore_for_file: non_constant_identifier_names
+
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:wedding/future/page/dress_code.dart';
@@ -189,16 +191,20 @@ class _WeddingPlanMobile extends StatelessWidget {
                 children: [
                   _PlanColumMobile(
                     img: 'assets/images/calendar2.png',
+                    title: 'Сбор гостей',
                   ),
                   _PlanColumMobile(
                     img: 'assets/images/wedding-rings.png',
+                    title: 'Регистрация бракосочетания',
                   ),
                   _PlanColumMobile(
                     img: 'assets/images/wine.png',
+                    title: 'Банкет',
                   ),
                   _PlanColumMobile(
                     img: 'assets/images/fireworks.png',
                     line: false,
+                    title: 'Завершение вечера',
                   ),
                 ],
               ),
@@ -255,7 +261,7 @@ class _WeddingPlanDesc extends StatelessWidget {
                     padding: EdgeInsets.only(top: 136),
                     child: _PlanColumn(
                       firstImg: 'assets/images/wedding-rings.png',
-                      firstTitle: 'Регистрация бракосочетания\n15:00',
+                      firstTitle: 'Регистрация\nбракосочетания\n15:00',
                       secondImg: 'assets/images/fireworks.png',
                       secondTitle: 'Завершение вечера\n22:00',
                     ),
@@ -289,10 +295,12 @@ class _DividerPlan extends StatelessWidget {
 class _PlanColumMobile extends StatelessWidget {
   final String img;
   final bool? line;
+  final String title;
 
   const _PlanColumMobile({
     required this.img,
     this.line = true,
+    required this.title,
     Key? key,
   }) : super(key: key);
 
@@ -305,10 +313,10 @@ class _PlanColumMobile extends StatelessWidget {
               image: AssetImage(img),
             ),
           ),
-          const Padding(
-            padding: EdgeInsets.only(bottom: 10),
+          Padding(
+            padding: const EdgeInsets.only(bottom: 10),
             child: Text(
-              'Сбор гостей\n 14:30',
+              title,
               textAlign: TextAlign.center,
             ),
           ),
@@ -415,7 +423,9 @@ class _CalendarAndFlowers extends StatelessWidget {
             const Stack(
               children: [
                 Image(
-                  image: AssetImage('assets/images/calendar.png'),
+                  image: AssetImage('assets/images/calendar(1).png'),
+                  width: 252,
+                  height: 201,
                 ),
                 Positioned(
                   top: 114,
@@ -490,12 +500,12 @@ class _SendButtonState extends State<_SendButton> {
                   onPressed: () async {
                     // _active.value = false;
                   },
-                  child: const Text(
+                  child: Text(
                     'Отправить',
-                    style: TextStyle(
-                      color: Colors.white,
+                    style: GoogleFonts.ptSansNarrow(
+                      fontWeight: FontWeight.w400,
                       fontSize: 20,
-                      height: 1,
+                      color: Colors.white,
                     ),
                   ),
                 )
@@ -511,14 +521,14 @@ class _SoloLine extends CustomPainter {
   @override
   void paint(Canvas canvas, Size size) {
     Paint paint_0_fill = Paint()..style = PaintingStyle.fill;
-    paint_0_fill.color = Color(0xff101010).withOpacity(1.0);
+    paint_0_fill.color = const Color(0xff101010).withOpacity(1.0);
     canvas.drawRect(
         Rect.fromLTWH(size.width * 0.4000000, 0, size.width * 0.2000000,
             size.height * 0.9433962),
         paint_0_fill);
 
     Paint paint_1_fill = Paint()..style = PaintingStyle.fill;
-    paint_1_fill.color = Color(0xff101010).withOpacity(1.0);
+    paint_1_fill.color = const Color(0xff101010).withOpacity(1.0);
     canvas.drawCircle(Offset(size.width * 0.5000000, size.height * 0.9528302),
         size.width * 0.5000000, paint_1_fill);
   }
@@ -565,13 +575,4 @@ class RPSCustomPainter extends CustomPainter {
   bool shouldRepaint(covariant CustomPainter oldDelegate) {
     return true;
   }
-}
-
-class DressCode extends StatelessWidget {
-  const DressCode({super.key});
-
-  @override
-  Widget build(BuildContext context) => Padding(
-        padding: padding,
-      );
 }
