@@ -353,3 +353,12 @@ class RPSCustomPainter extends CustomPainter {
     return true;
   }
 }
+
+class DressCode extends StatelessWidget {
+  const DressCode({super.key});
+
+  @override
+  Widget build(BuildContext context) => Padding(
+        padding: padding,
+      );
+}
