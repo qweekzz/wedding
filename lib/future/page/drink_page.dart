@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:wedding/core/date_base/date_base.dart';
 import 'package:wedding/future/page/widgets/topic_page.dart';
 
 @immutable
@@ -34,15 +35,25 @@ class DrinkPage extends StatelessWidget {
                   builder: (context, _) {
                     return SizedBox(
                       width: 320,
-                      child: ListView.builder(
-                        itemCount: 7,
-                        physics: const NeverScrollableScrollPhysics(),
-                        shrinkWrap: true,
-                        itemBuilder: (context, index) => _DrinkSelector(
-                          title: 'title',
-                          select: select,
-                          index: index,
-                        ),
+                      child: FutureBuilder(
+                        future: DateBase().getDrink(),
+                        builder: (context, snapshot) {
+                          final Map<String, dynamic>? data =
+                              snapshot.data?.data();
+                          return snapshot.data != null
+                              ? ListView.builder(
+                                  itemCount: data?.length,
+                                  physics: const NeverScrollableScrollPhysics(),
+                                  shrinkWrap: true,
+                                  itemBuilder: (context, index) =>
+                                      _DrinkSelector(
+                                    title: data?['$index']['title'] ?? '',
+                                    select: select,
+                                    index: index,
+                                  ),
+                                )
+                              : const SizedBox.shrink();
+                        },
                       ),
                     );
                   },
@@ -59,15 +70,11 @@ class _DrinkSelector extends StatelessWidget {
   final String title;
   final int index;
   final ValueNotifier<List<int>> select;
-  // final VoidCallback onTap;
-  // final bool checked;
 
   const _DrinkSelector({
     required this.title,
     required this.select,
     required this.index,
-    // required this.onTap,
-    // required this.checked,
     Key? key,
   }) : super(key: key);
 
@@ -89,7 +96,6 @@ class _DrinkSelector extends StatelessWidget {
                   } else {
                     select.value = List.from(select.value)..add(index);
                   }
-                  print(select.value);
                 },
               ),
               Text(title),

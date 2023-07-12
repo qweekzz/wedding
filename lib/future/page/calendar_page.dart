@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
+import 'package:rive/rive.dart' as rive;
+import 'package:wedding/core/date_base/date_base.dart';
 import 'package:wedding/future/page/dress_code.dart';
 import 'package:wedding/future/page/drink_page.dart';
 import 'package:wedding/future/page/wedding_place.dart';
@@ -9,14 +12,19 @@ import 'widgets/widgets.dart';
 
 @immutable
 class CalendarPage extends StatelessWidget {
+  final ValueNotifier<bool> heartAnimate;
+
   const CalendarPage({
+    required this.heartAnimate,
     Key? key,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) => ConstrainedBox(
         constraints: const BoxConstraints(minWidth: 533),
-        child: const _MainStack(),
+        child: _MainStack(
+          heartAnimate: heartAnimate,
+        ),
       );
 }
 
@@ -115,7 +123,10 @@ List<Widget> listWidgets(BuildContext context) {
 
 @immutable
 class _MainStack extends StatefulWidget {
+  final ValueNotifier<bool> heartAnimate;
+
   const _MainStack({
+    required this.heartAnimate,
     Key? key,
   }) : super(key: key);
 
@@ -125,16 +136,19 @@ class _MainStack extends StatefulWidget {
 
 class _MainStackState extends State<_MainStack> {
   late final ValueNotifier<List<int>> _select;
+  late final ValueNotifier<bool> _active;
 
   @override
   void initState() {
     super.initState();
     _select = ValueNotifier([]);
+    _active = ValueNotifier(true);
   }
 
   @override
   void dispose() {
     _select.dispose();
+    _active.dispose();
     super.dispose();
   }
 
@@ -145,7 +159,9 @@ class _MainStackState extends State<_MainStack> {
           ...listWidgets(context),
           Column(
             children: [
-              const _CalendarAndFlowers(),
+              _CalendarAndFlowers(
+                heartAnimate: widget.heartAnimate,
+              ),
               MediaQuery.of(context).size.width > 500
                   ? const _WeddingPlanDesc()
                   : const _WeddingPlanMobile(),
@@ -157,6 +173,8 @@ class _MainStackState extends State<_MainStack> {
               ),
               _SendButton(
                 select: _select,
+                title: 'Подтвердить',
+                active: _active,
               ),
             ],
           ),
@@ -376,11 +394,19 @@ class _PlanColumn extends StatelessWidget {
 }
 
 @immutable
-class _CalendarAndFlowers extends StatelessWidget {
+class _CalendarAndFlowers extends StatefulWidget {
+  final ValueNotifier<bool> heartAnimate;
+
   const _CalendarAndFlowers({
+    required this.heartAnimate,
     Key? key,
   }) : super(key: key);
 
+  @override
+  State<_CalendarAndFlowers> createState() => _CalendarAndFlowersState();
+}
+
+class _CalendarAndFlowersState extends State<_CalendarAndFlowers> {
   @override
   Widget build(BuildContext context) => Padding(
         padding: const EdgeInsets.only(top: 130),
@@ -412,17 +438,25 @@ class _CalendarAndFlowers extends StatelessWidget {
                 textAlign: TextAlign.center,
               ),
             ),
-            const Stack(
+            Stack(
               children: [
-                Image(
+                const Image(
                   image: AssetImage('assets/images/calendar.png'),
                 ),
-                Positioned(
-                  top: 114,
-                  left: 145,
-                  child: Image(
-                    image: AssetImage('assets/images/heart.png'),
-                  ),
+                AnimatedBuilder(
+                  animation: widget.heartAnimate,
+                  builder: (context, _) => widget.heartAnimate.value
+                      ? const Positioned(
+                          height: 250,
+                          width: 250,
+                          top: 2,
+                          left: 34,
+                          child: rive.RiveAnimation.asset(
+                            'assets/rive/new_file.riv',
+                            fit: BoxFit.cover,
+                          ),
+                        )
+                      : const SizedBox.shrink(),
                 ),
               ],
             ),
@@ -433,10 +467,14 @@ class _CalendarAndFlowers extends StatelessWidget {
 
 @immutable
 class _SendButton extends StatefulWidget {
-  final ValueNotifier<List<int>> select;
+  final ValueNotifier<bool> active;
+  final ValueNotifier<List<int>>? select;
+  final String title;
 
   const _SendButton({
-    required this.select,
+    required this.title,
+    required this.active,
+    this.select,
     Key? key,
   }) : super(key: key);
 
@@ -445,12 +483,21 @@ class _SendButton extends StatefulWidget {
 }
 
 class _SendButtonState extends State<_SendButton> {
-  late ValueNotifier<bool> _active;
+  late final TextEditingController _nameController;
+  late final TextEditingController _surnameController;
 
   @override
   void initState() {
     super.initState();
-    _active = ValueNotifier(true);
+    _surnameController = TextEditingController();
+    _nameController = TextEditingController();
+  }
+
+  @override
+  void dispose() {
+    _surnameController.dispose();
+    _nameController.dispose();
+    super.dispose();
   }
 
   @override
@@ -475,8 +522,8 @@ class _SendButtonState extends State<_SendButton> {
           ),
         ),
         child: AnimatedBuilder(
-          animation: _active,
-          builder: (context, _) => _active.value
+          animation: widget.active,
+          builder: (context, _) => widget.active.value
               ? ElevatedButton(
                   style: ElevatedButton.styleFrom(
                     shadowColor: Colors.transparent,
@@ -487,12 +534,10 @@ class _SendButtonState extends State<_SendButton> {
                     ),
                     backgroundColor: Colors.transparent,
                   ),
-                  onPressed: () async {
-                    // _active.value = false;
-                  },
-                  child: const Text(
-                    'Отправить',
-                    style: TextStyle(
+                  onPressed: () async => _showNameSheet(),
+                  child: Text(
+                    widget.title,
+                    style: GoogleFonts.ptSansNarrow(
                       color: Colors.white,
                       fontSize: 20,
                       height: 1,
@@ -504,6 +549,184 @@ class _SendButtonState extends State<_SendButton> {
       ),
     );
   }
+
+  Future<void> _showNameSheet() async {
+    showBarModalBottomSheet(
+      context: context,
+      builder: (context) => Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          if (MediaQuery.of(context).size.width > 535)
+            Expanded(
+              child: Container(
+                height: 300,
+                color: Colors.black38,
+              ),
+            ),
+          MediaQuery.of(context).size.width > 535
+              ? Expanded(
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 24),
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        _TextField(
+                          title: 'Имя',
+                          controller: _nameController,
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 24),
+                          child: _TextField(
+                            title: 'Фамилия',
+                            controller: _surnameController,
+                          ),
+                        ),
+                        _ModalButton(
+                          select: widget.select,
+                          nameController: _nameController,
+                          surnameController: _surnameController,
+                          active: widget.active,
+                        ),
+                      ],
+                    ),
+                  ),
+                )
+              : Expanded(
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 24),
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.only(top: 24),
+                          child: _TextField(
+                            title: 'Имя',
+                            controller: _nameController,
+                          ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 24),
+                          child: _TextField(
+                            title: 'Фамилия',
+                            controller: _surnameController,
+                          ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.only(bottom: 24),
+                          child: _ModalButton(
+                            select: widget.select,
+                            nameController: _nameController,
+                            surnameController: _surnameController,
+                            active: widget.active,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+          if (MediaQuery.of(context).size.width > 535)
+            Expanded(
+              child: Container(
+                height: 300,
+                color: Colors.black38,
+              ),
+            ),
+        ],
+      ),
+    );
+  }
+}
+
+@immutable
+class _ModalButton extends StatelessWidget {
+  final ValueNotifier<List<int>>? select;
+  final TextEditingController nameController;
+  final TextEditingController surnameController;
+  final ValueNotifier<bool> active;
+
+  const _ModalButton({
+    required this.select,
+    required this.nameController,
+    required this.surnameController,
+    required this.active,
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) => DecoratedBox(
+        decoration: const BoxDecoration(
+          boxShadow: [
+            BoxShadow(
+                color: Colors.black26, offset: Offset(0, 4), blurRadius: 5.0)
+          ],
+          borderRadius: BorderRadius.all(Radius.circular(5)),
+          gradient: LinearGradient(
+            colors: [
+              Color.fromRGBO(0, 209, 255, 1),
+              Color.fromRGBO(103, 178, 101, 1),
+            ],
+          ),
+        ),
+        child: ElevatedButton(
+          style: ElevatedButton.styleFrom(
+            shadowColor: Colors.transparent,
+            shape: const RoundedRectangleBorder(),
+            padding: const EdgeInsets.symmetric(
+              vertical: 18,
+              horizontal: 63,
+            ),
+            backgroundColor: Colors.transparent,
+          ),
+          onPressed: () async {
+            DateBase().addName(
+              nameController.text,
+              surnameController.text,
+              select?.value,
+            );
+            active.value = false;
+            Navigator.pop(context);
+          },
+          child: Text(
+            'Отпарвить',
+            style: GoogleFonts.ptSansNarrow(
+              color: Colors.white,
+              fontSize: 20,
+              height: 1,
+            ),
+          ),
+        ),
+      );
+}
+
+@immutable
+class _TextField extends StatelessWidget {
+  final TextEditingController controller;
+  final String title;
+
+  const _TextField({
+    required this.controller,
+    required this.title,
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) => TextField(
+        controller: controller,
+        decoration: InputDecoration(
+          labelText: title,
+          labelStyle: const TextStyle(
+            fontSize: 14,
+          ),
+          isCollapsed: true,
+          contentPadding: const EdgeInsets.fromLTRB(8, 14, 8, 14),
+          border: const OutlineInputBorder(
+            borderRadius: BorderRadius.all(
+              Radius.circular(5.0),
+            ),
+            borderSide: BorderSide(color: Colors.black, width: 1),
+          ),
+        ),
+      );
 }
 
 //Copy this CustomPainter code to the Bottom of the File

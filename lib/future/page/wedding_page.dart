@@ -14,10 +14,12 @@ class WeddingPage extends StatefulWidget {
 
 class _WeddingPageState extends State<WeddingPage> {
   late final ScrollController _controller;
+  late final ValueNotifier<bool> _heartAnimate;
 
   _scrollListener() {
-    if (_controller.offset > 950) {
-      print(_controller.position.pixels);
+    if (_controller.offset > 750) {
+      _heartAnimate.value = true;
+      // print(_controller.position.pixels);
       // setState(() {
       //   message = "reach the bottom";
       // });
@@ -28,10 +30,12 @@ class _WeddingPageState extends State<WeddingPage> {
   void initState() {
     super.initState();
     _controller = ScrollController()..addListener(_scrollListener);
+    _heartAnimate = ValueNotifier(false);
   }
 
   @override
   void dispose() {
+    _heartAnimate.dispose();
     _controller
       ..removeListener(_scrollListener)
       ..dispose();
@@ -70,10 +74,12 @@ class _WeddingPageState extends State<WeddingPage> {
             ),
             SingleChildScrollView(
               controller: _controller,
-              child: const Column(
+              child: Column(
                 children: [
-                  WelcomePage(),
-                  CalendarPage(),
+                  const WelcomePage(),
+                  CalendarPage(
+                    heartAnimate: _heartAnimate,
+                  ),
                 ],
               ),
             ),

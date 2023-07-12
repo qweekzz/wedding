@@ -68,6 +68,7 @@ class _WeddingPlaceState extends State<WeddingPlace>
   @override
   void dispose() {
     // _animationController!.dispose();
+
     _mapController!.dispose();
     _routes.clear();
     super.dispose();
@@ -197,10 +198,14 @@ class _HeadLineText extends StatelessWidget {
                 ),
                 TextSpan(
                   text: '«GREEN HALL UFA»',
-                  style: TextStyle(fontWeight: FontWeight.w700),
+                  style: TextStyle(
+                    fontWeight: FontWeight.w700,
+                    color: Colors.black,
+                  ),
                 ),
                 TextSpan(
                   text: ', ул. Линёвая 76/1',
+                  style: TextStyle(color: Colors.black),
                 ),
               ],
             ),
