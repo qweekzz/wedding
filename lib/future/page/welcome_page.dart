@@ -61,9 +61,9 @@ class RPSCustomPainter extends CustomPainter {
     paint_0_fill.shader = ui.Gradient.linear(
         Offset(size.width * 0.5065104, size.height * 0.4893519),
         Offset(size.width * 0.5000000, size.height), [
-      Color(0xff858690).withOpacity(0.58),
-      Color(0xff3E5064).withOpacity(1),
-      Color(0xff50676F).withOpacity(1)
+      const Color(0xff858690).withOpacity(0.58),
+      const Color(0xff3E5064).withOpacity(1),
+      const Color(0xff50676F).withOpacity(1)
     ], [
       0,
       0.124496,
@@ -97,10 +97,10 @@ class RPSCustomPainter extends CustomPainter {
     paint_1_fill.shader = ui.Gradient.linear(
         Offset(size.width * 0.4901042, size.height * 0),
         Offset(size.width * 0.4901042, size.height * 0.5490741), [
-      Color(0xff88A9DB).withOpacity(1),
-      Color(0xffE3E0D4).withOpacity(1),
-      Color(0xffE3BE9A).withOpacity(1),
-      Color(0xffE09E85).withOpacity(1)
+      const Color(0xff88A9DB).withOpacity(1),
+      const Color(0xffE3E0D4).withOpacity(1),
+      const Color(0xffE3BE9A).withOpacity(1),
+      const Color(0xffE09E85).withOpacity(1)
     ], [
       0.248731,
       0.71557,
@@ -145,6 +145,7 @@ class _Picture extends StatelessWidget {
       );
 }
 
+//TODO добавить weddintDate вместо разметки
 @immutable
 class _DateCol extends StatelessWidget {
   const _DateCol({
